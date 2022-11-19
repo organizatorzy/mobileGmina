@@ -1,31 +1,70 @@
 import React from 'react'
-import { Button, View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { RouterProps } from '../config/navigation'
-import { INSTRUCTIONS_VIEW } from '../config/paths'
-import logo from '../../assets/kompostownik.png';
+import { MANAGE_REWARDS_VIEW, COMPOST_LIST_VIEW } from '../config/paths'
+import { Button } from '../components/Button'
+
+import kompostonosz from '../../assets/kompostownikGmina.png'
 
 export const HomeView = ({ navigation }: RouterProps) => {
   return (
     <View style={styles.container}>
-      <ImageBackground source={logo} resizeMode="cover" style={styles.background}>
-      </ImageBackground>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <ImageBackground source={kompostonosz} resizeMode='cover' style={styles.image}></ImageBackground>
+      <View style={styles.headings}>
+        <Text style={styles.title}>Kompostonosz</Text>
+        <Text style={styles.subtitle}>Witaj urzędniku gminy!</Text>
+        <Text style={styles.subtitle}>w Panelu Administratora</Text>
+      </View>
+     <View style={styles.buttons}>
       <Button
-        title="Next"
-        onPress={() => navigation.navigate(INSTRUCTIONS_VIEW)}
-      />
+          title="Zaakceptuj kompost mieszkańców"
+          onPress={() => navigation.navigate(COMPOST_LIST_VIEW)}
+        />
+        <Button
+          title="Zarzadzaj nagrodami"
+          onPress={() => navigation.navigate(MANAGE_REWARDS_VIEW)}
+        />
+        <Button
+          title="Zrealizuj nagrodę użytkownika"
+          onPress={() => navigation.navigate(MANAGE_REWARDS_VIEW)}
+        />
+     </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  headings:{
+    marginTop: 60,
+  },
+  buttons:{
+    width: '100%',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 60,
+    left: 0,
+  },
+  subtitle:{
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  title:{
+    fontSize: 32,
+    marginBottom: 10,
+  },
     container: {
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
     },
     background:{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+    image:{
       position: 'absolute',
       top: 0,
       left: 0,
