@@ -16,7 +16,7 @@ export const ExecuteRewardView = ({ navigation }: RouterProps) => {
 
   function executeReward(){
     try{
-
+      isValid()
       navigation.navigate(SUCCESS_VIEW)
     }
     catch{

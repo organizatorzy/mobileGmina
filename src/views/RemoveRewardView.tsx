@@ -4,6 +4,8 @@ import { RouterProps } from '../config/navigation'
 import { Header } from '../components/Header';
 import { MoneyCounter } from '../components/MoneyCounter';
 import { Button } from '../components/Button';
+import { db } from '../firebase/config'
+import { deleteDoc, doc } from 'firebase/firestore'
 
 
 export const RemoveRewardView = ({ navigation, route }: RouterProps) => {
@@ -13,9 +15,10 @@ export const RemoveRewardView = ({ navigation, route }: RouterProps) => {
   const {item} = route.params;
 
   function removeReward(){
-      //call api to remove a reward
+      deleteDoc(doc(db, 'award', item.ref ))
       navigation.goBack()
   }
+
 
   return (
     <SafeAreaView style={styles.container}>

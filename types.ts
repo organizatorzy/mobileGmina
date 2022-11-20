@@ -12,4 +12,7 @@ export interface Reward {
     id: string;
     name: string;
     price: number;
+    // TODO: add cypher support
+    password: string;
+    ref: string;
 }

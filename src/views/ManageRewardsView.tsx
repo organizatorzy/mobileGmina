@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { RouterProps } from '../config/navigation'
 import { ADD_REWARD, REMOVE_REWARD_VIEW } from '../config/paths'
@@ -6,31 +6,39 @@ import { Reward } from '../../types'
 import { Header } from '../components/Header';
 import { Button } from '../components/Button';
 import { MoneyCounter } from '../components/MoneyCounter';
+import { useIsFocused } from '@react-navigation/native';
+import { db } from '../firebase/config'
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
 
-function fetchPrizes(): Reward[]{
-  return  [
-    {
-      id: '21-37',
-      name: 'Zniżka komunikacja miejska 15%',
-      price: 15
-    },
-    {
-      id: '2-137',
-      name: 'Zniżka komunikacja miejska 25%',
-      price: 25
-    },
+function fetchPrizes(){
 
-    {
-      id: '2137',
-      name: 'Bilet autobusowy 20 minut',
-      price: 10
-    },
-  ]
 }
 
 export const ManageRewardsView = ({ navigation }: RouterProps) => {
 
-  const prizes = fetchPrizes();
+  const [prizes, setPrizes] = useState<Reward[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const isFocused = useIsFocused()
+
+
+  console.log(prizes)
+
+  useEffect(() => {
+      setIsLoading(true)
+      fetchPrizes();
+
+  }, [isFocused]);
+
+  async function fetchPrizes() {
+    const querySnapshot = await getDocs(collection(db, "award"));
+    let temp: Reward[]  = []
+    querySnapshot.forEach((doc) => {
+      temp.push({...doc.data(), ref: doc.id} as Reward)
+    })
+    setPrizes(temp);
+    setIsLoading(false);
+  }
 
 
   const renderItem = ({ item }: {item: Reward}) => {
@@ -51,6 +59,13 @@ export const ManageRewardsView = ({ navigation }: RouterProps) => {
       );
 
       };
+
+
+    if(isLoading){
+      <SafeAreaView style={styles.container}>
+        <Text>LADOWANIE</Text>
+</SafeAreaView>
+    }
 
   return (
     <SafeAreaView style={styles.container}>

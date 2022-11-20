@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import 'react-native-get-random-values'
 import { StyleSheet, TextInput, SafeAreaView, Text  } from 'react-native';
 import { RouterProps } from '../config/navigation'
 import { Header } from '../components/Header';
 import { Button } from '../components/Button';
+import { setDoc, doc } from "firebase/firestore";
+import {db, storage} from '../firebase/config'
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const AddRewardView = ({ navigation }: RouterProps) => {
@@ -14,9 +18,14 @@ export const AddRewardView = ({ navigation }: RouterProps) => {
     return Number(price) > 0 && name.length > 0
   }
 
-  function addReward(){
+  async function addReward(){
     if(isValid()){
-      //call api to add a reward
+      await setDoc(doc(db, 'award', uuidv4() ), {
+        password: uuidv4(),
+        name,
+        price,
+        id: uuidv4()
+      })
       navigation.goBack()
     }
   }
