@@ -1,9 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { RouterProps } from '../config/navigation'
-import { MANAGE_REWARDS_VIEW, COMPOST_LIST_VIEW } from '../config/paths'
+import { MANAGE_REWARDS_VIEW, COMPOST_LIST_VIEW, EXECUTE_REWARDS_VIEW } from '../config/paths'
 import { Button } from '../components/Button'
-
 import kompostonosz from '../../assets/kompostownikGmina.png'
 
 export const HomeView = ({ navigation }: RouterProps) => {
@@ -26,7 +25,7 @@ export const HomeView = ({ navigation }: RouterProps) => {
         />
         <Button
           title="Zrealizuj nagrodę użytkownika"
-          onPress={() => navigation.navigate(MANAGE_REWARDS_VIEW)}
+          onPress={() => navigation.navigate(EXECUTE_REWARDS_VIEW)}
         />
      </View>
     </View>
