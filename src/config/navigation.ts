@@ -7,13 +7,13 @@ export const Stack = createNativeStackNavigator();
 export type RootStackParamList = {
     [HOME_VIEW]: undefined;
     [ADD_REWARD]: undefined;
-    [COMPOST_LIST_VIEW]: undefined;
-    [COMPOST_DETAILS]: {item: Compost};
+    [COMPOST_LIST_VIEW]: { refresh: boolean };
+    [COMPOST_DETAILS]: { item: Compost };
     [MANAGE_REWARDS_VIEW]: undefined;
     [ERROR_VIEW]: undefined;
     [SUCCESS_VIEW]: undefined;
     [EXECUTE_REWARDS_VIEW]: undefined;
-    [REMOVE_REWARD_VIEW]: {item: Reward};
+    [REMOVE_REWARD_VIEW]: { item: Reward };
   };
 
   export type RouterProps = NativeStackScreenProps<RootStackParamList>;

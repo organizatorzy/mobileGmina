@@ -1,9 +1,10 @@
 export interface Compost{
-    id: string;
-    ownerId: string;
+    id: number;
+    ownerId: number;
     photo: string;
     date: string;
     ownerName: string;
+    ref: string;
 }
 
 

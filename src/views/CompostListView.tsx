@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import { formatDistance, subDays } from 'date-fns'
 import { RouterProps } from '../config/navigation'
@@ -7,54 +7,42 @@ import { COMPOST_DETAILS } from '../config/paths'
 import { Compost } from '../../types'
 import { Button } from '../components/Button'
 
+import { useIsFocused } from '@react-navigation/native';
+
+import { db } from '../firebase/config'
+import { collection, getDocs } from 'firebase/firestore'
+
+export const CompostListView = ({ navigation, route }: RouterProps) => {
+
+  const isFocused = useIsFocused()
+//@ts-ignore
+  const {refresh} = route.params;
+  const [composts, setComposts] = useState<Compost[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetchComposts();
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetchComposts();
+  }, [isFocused, refresh]);
+
+  async function fetchComposts() {
+    const querySnapshot = await getDocs(collection(db, "compostToAccept"));
+    let temp: Compost[]  = []
+    querySnapshot.forEach((doc) => {
+      temp.push({...doc.data(), ref: doc.id} as Compost)
+    })
+    setComposts(temp);
+    setIsLoading(false);
+  }
 
 
-const DATA: Compost[] = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    ownerId: '123',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    ownerId: '324',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    ownerId: '1234',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    ownerId: '123',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    ownerId: '324',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    ownerId: '1234',
-    photo: 'https://www.mojpieknyogrod.pl/media/cache/default_view/uploads/media/default/0001/50/zdj-fotolia-com_5.jpeg',
-    date: 'Sat Nov 19 2022 22:03:11 GMT+0100 (Central European Standard Time)',
-    ownerName: 'Maciej Kaszkowiak',
-  },
-];
-
-export const CompostListView = ({ navigation }: RouterProps) => {
+  console.log('composts')
+  console.log(composts)
 
 
   const renderItem = ({ item }: {item: Compost}) => {
@@ -71,16 +59,22 @@ export const CompostListView = ({ navigation }: RouterProps) => {
 
       );
 
-      };
+  };
+
+  if(isLoading){
+    <SafeAreaView style={styles.container}>
+      <Text>LOADING</Text>
+    </SafeAreaView>
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.bigTitle}>Tutaj oczekuja zdjecia kompostu do zaakceptowania</Text>
       <FlatList
-        data={DATA}
+        data={composts}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => String(item.id)}
         style={{
           width: '100%',
           marginTop: 20,

@@ -17,7 +17,7 @@ export const HomeView = ({ navigation }: RouterProps) => {
      <View style={styles.buttons}>
       <Button
           title="Zaakceptuj kompost mieszkańców"
-          onPress={() => navigation.navigate(COMPOST_LIST_VIEW)}
+          onPress={() => navigation.navigate(COMPOST_LIST_VIEW, { refresh: false })}
         />
         <Button
           title="Zarzadzaj nagrodami"
